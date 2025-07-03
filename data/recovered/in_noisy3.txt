@@ -1,0 +1,2 @@
+ABC␣D␣EFGH␣IJK␠L␣MN␠O␣PQ␣R␠S␠TUV␠WXY␣Z
+A␠BCDEFG␠H␠IJKLMN␣OPQRSTUVWXYZ abcd␠efgh␠i␠jk␠lmnopq␣rs␠tuvwxy␣z ,-.:;

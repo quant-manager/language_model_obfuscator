@@ -125,8 +125,9 @@ Zero-Width No-Break Space (U+FEFF):
 
 import argparse
 from pathlib import Path
-from random import seed, choice
+from random import seed, choice, random
 from datetime import datetime
+import numpy as np
 
 
 ###############################################################################
@@ -655,17 +656,43 @@ if False :
     print("W\uFFA0W") # HALFWIDTH HANGUL FILLER
 
 
+def add_noise(
+        str_input,
+        tpl_str_noise = (
+            '\u200C', # "ZERO WIDTH NON-JOINER" ('␣\u2423' "OPEN BOX" (9251))
+            '\u200D', # "ZERO WIDTH JOINER" ('␠\u2420' "SYMBOL FOR SPACE" (9248))
+            ),
+        noise_insert_percent = 0) :
+
+    if noise_insert_percent > 0 :
+        flt_noise_insert_prob = noise_insert_percent / 100.
+        str_output = ''.join('%s%s' % (
+            str_input[i], choice(tpl_str_noise)
+            if (str_input[i].isalpha() and
+                i < len(str_input) and
+                str_input[i + 1].isalpha() and
+                random() <= flt_noise_insert_prob) else '')
+            for i in range(len(str_input)))
+    else :
+        str_output = str_input
+    return str_output
+
+
 def obfuscate(
         dict_obfuscator, integer_random_seed,
-        input_file_name, output_file_name, verbosity) :
+        input_file_name, output_file_name,
+        noise_insert_percent = 0, verbosity = 0) :
     if integer_random_seed is None :
         seed(datetime.now().timestamp())
     else :
         seed(a = integer_random_seed)
     with open(input_file_name, 'r', encoding='utf-8') as file:
         str_in = file.read()
+    str_out = add_noise( # must be called before obfuscation
+        str_input = str_in,
+        noise_insert_percent = noise_insert_percent,)
     str_out = ''.join(tuple(map(lambda x: choice(
-        dict_obfuscator.get(x+x, x)), str_in)))
+        dict_obfuscator.get(x+x, x)), str_out)))
     if verbosity == 1 :
         print("Input file:\n")
         print(str_in)
@@ -689,9 +716,13 @@ def main(
          input_file_name : str,
          output_file_name : str,
          integer_random_seed : int = None,
-         verbosity : int = 0,
-         reverse_obfuscation : int = 0,
+         noise_insert_percent : int = None,
+         verbosity : int = None,
+         reverse_obfuscation : int = None,
          ) :
+    noise_insert_percent = 0 if noise_insert_percent is None else noise_insert_percent
+    verbosity = 0 if verbosity is None else verbosity
+    reverse_obfuscation = 0 if reverse_obfuscation is None else reverse_obfuscation
     if 1 <= obfuscator_type_index <= 5 :
         if Path(input_file_name).is_file() :
             if not Path(output_file_name).is_dir() :
@@ -722,6 +753,7 @@ def main(
                         integer_random_seed = integer_random_seed,
                         input_file_name = input_file_name,
                         output_file_name = output_file_name,
+                        noise_insert_percent = noise_insert_percent,
                         verbosity = verbosity,)
                 else :
                     raise FileExistsError(
@@ -741,6 +773,13 @@ if __name__ == "__main__":
         "-s",
         "--integer_random_seed",
         help = "Optional. Default: current time. A non-negative integer seed for random choices during obfuscation.",
+        type = int,
+        required = False,
+    )
+    parser.add_argument(
+        "-n",
+        "--noise_insert_percent",
+        help = "Optional. Default: 0. Range [0; 100]. Probabilty percent for ZERO WIDTH (NON-)JOINER characters to be randomly inserted between each adjacent pair of letters.",
         type = int,
         required = False,
     )
