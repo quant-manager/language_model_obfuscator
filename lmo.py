@@ -143,8 +143,6 @@ from datetime import datetime
 DICT_OBFUSCATOR_DETER_FULL_FWF = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
-    # Optionally prepend or append these zero-width spaces to a word:
-    '␠\u2420' : '\u200D\u200D', # "SYMBOL FOR SPACE" (9248) -> "ZERO WIDTH JOINER"
     #
     ' \u0020' : '　\u3000',
     #
@@ -259,8 +257,6 @@ DICT_OBFUSCATOR_DETER_FULL_FWF = {
 DICT_OBFUSCATOR_DETER_FULL = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
-    # Optionally prepend or append these zero-width spaces to a word:
-    '␠\u2420' : '\u200D\u200D', # "SYMBOL FOR SPACE" (9248) -> "ZERO WIDTH JOINER"
     #
     ' \u0020' : '⠀\u2800', # BRAILLE PATTERN BLANK; it does not act as a space
     #
@@ -330,8 +326,6 @@ DICT_OBFUSCATOR_DETER_FULL = {
 DICT_OBFUSCATOR_RANDOM_FULL = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
-    # Optionally prepend or append these zero-width spaces to a word:
-    '␠\u2420' : '\u200D\u200D', # "SYMBOL FOR SPACE" (9248) -> "ZERO WIDTH JOINER"
     #
     # "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE"; "HALFWIDTH HANGUL FILLER"
     ' \u0020' : '⠀\u2800 \u2005ﾠ\uFFA0',
@@ -402,8 +396,6 @@ DICT_OBFUSCATOR_RANDOM_FULL = {
 DICT_OBFUSCATOR_RANDOM_PARTIAL = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
-    # Optionally prepend or append these zero-width spaces to a word:
-    '␠\u2420' : '\u200D\u200D', # "SYMBOL FOR SPACE" (9248) -> "ZERO WIDTH JOINER"
     #
     # "SPACE"; "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE"; "HALFWIDTH HANGUL FILLER"
     ' \u0020' : ' \u0020⠀\u2800 \u2005ﾠ\uFFA0',
@@ -473,8 +465,6 @@ DICT_OBFUSCATOR_RANDOM_PARTIAL = {
 DICT_OBFUSCATOR_RANDOM_ALL = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
-    # Optionally prepend or append these zero-width spaces to a word:
-    '␠\u2420' : '\u200D\u200D', # "SYMBOL FOR SPACE" (9248) -> "ZERO WIDTH JOINER"
     #
     # "SPACE"; "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE"; "HANGUL FILLER";
     # "HALFWIDTH HANGUL FILLER"; "NO-BREAK SPACE".
@@ -661,17 +651,34 @@ def add_noise(
             # '\u200C', # "ZERO WIDTH NON-JOINER" ('␣\u2423' "OPEN BOX" (9251))
             '\u200D', # "ZERO WIDTH JOINER" ('␠\u2420' "SYMBOL FOR SPACE" (9248))
             ),
+        str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         noise_insertion_percent = 0) :
 
     if len(tpl_str_noise) > 0 and noise_insertion_percent > 0 :
         flt_noise_insertion_prob = noise_insertion_percent / 100.
         str_output = ''.join('%s%s' % (
             str_input[i], choice(tpl_str_noise)
-            if (str_input[i].isalpha() and
+            if ((str_input[i].isalpha() or str_input[i] == str_gap) and
                 (i + 1) < len(str_input) and
                 str_input[i + 1].isalpha() and
                 random() <= flt_noise_insertion_prob) else '')
             for i in range(len(str_input)))
+    else :
+        str_output = str_input
+    return str_output
+
+
+def remove_noise(
+        str_input,
+        tpl_str_noise = (
+            # '\u200C', # "ZERO WIDTH NON-JOINER" ('␣\u2423' "OPEN BOX" (9251))
+            '\u200D', # "ZERO WIDTH JOINER" ('␠\u2420' "SYMBOL FOR SPACE" (9248))
+            ),
+        ) :
+    if len(tpl_str_noise) > 0 :
+        set_str_noise = set(tpl_str_noise)
+        str_output = ''.join(str_input[i] if str_input[i] not in set_str_noise
+                             else '' for i in range(len(str_input)))
     else :
         str_output = str_input
     return str_output
@@ -684,10 +691,7 @@ def add_gaps(
             '\u200A\u2800', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
             '\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
             '\u200A\uFFA0', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
-            '\u205F\u200A', # "MEDIUM MATHEMATICAL SPACE" (222) + "HAIR SPACE" (100)
-            '\u200A\u205F', # "HAIR SPACE" (100) + "MEDIUM MATHEMATICAL SPACE" (222)
             '\u3164',       # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
-            '\u2004',       # "THREE-PER-EM SPACE (thick space)" (333)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         set_str_orig_spaces = {'\u0020',}, # "SPACE" width 260
@@ -710,10 +714,7 @@ def remove_gaps(
             '\u200A\u2800', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
             '\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
             '\u200A\uFFA0', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
-            '\u205F\u200A', # "MEDIUM MATHEMATICAL SPACE" (222) + "HAIR SPACE" (100)
-            '\u200A\u205F', # "HAIR SPACE" (100) + "MEDIUM MATHEMATICAL SPACE" (222)
             '\u3164',       # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
-            '\u2004',       # "THREE-PER-EM SPACE (thick space)" (333)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         str_orig_space = '\u0020', # "SPACE" width 260
@@ -747,19 +748,21 @@ def obfuscate(
 
     str_output = str_input
     if gaps_insertion_flag :
-        # "gaps" and "noise" are mutually exclusive!
+        # Adding/removing gaps must be done before obfuscation.
         if reverse_obfuscation_flag :
             str_output = remove_gaps(str_input = str_output,)
         else :
             str_output = add_gaps(str_input = str_output,)
 
-    if noise_insertion_percent > 0 :
-        # Adding noise  must be done before obfuscation
+    if reverse_obfuscation_flag :
+            str_output = remove_noise(str_input = str_output,)
+    elif noise_insertion_percent > 0 :
+        # Adding noise must be done before obfuscation.
         str_output = add_noise(
             str_input = str_output,
             noise_insertion_percent = noise_insertion_percent,)
 
-    # obfuscation
+    # Obfuscation:
     str_output = ''.join(tuple(map(lambda x : choice(
         dict_obfuscator.get(x + x, x)), str_output)))
 
