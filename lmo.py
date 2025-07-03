@@ -740,21 +740,21 @@ if __name__ == "__main__":
     parser.add_argument(
         "-s",
         "--integer_random_seed",
-        help = "The integer seed for random choices during obfuscation.",
+        help = "Optional. Default: current time. A non-negative integer seed for random choices during obfuscation.",
         type = int,
         required = False,
     )
     parser.add_argument(
         "-v",
         "--verbosity",
-        help = "Output verbosity integer at 0 for no traces and 1 for traces.",
+        help = "Optional. Default: 0. Output verbosity integer at 0 for no traces and 1 for generating traces.",
         type = int,
         required = False,
     )
     parser.add_argument(
         "-r",
         "--reverse_obfuscation",
-        help = "Run reverse obfuscation to recover original text file.",
+        help = "Optional. Default: 0. Run reverse obfuscation to recover original text file (1) or forward obfuscation (0).",
         type = int,
         required = False,
     )
@@ -762,7 +762,7 @@ if __name__ == "__main__":
         "-t",
         "--obfuscator_type_index",
         help = '\n'.join((
-            "The index of the obfuscator type in range from 1 to 5:",
+            "Mandatory. The index of the obfuscator type in range from 1 to 5:",
             DICT_OBFUSCATOR_TYPES[1],
             DICT_OBFUSCATOR_TYPES[2],
             DICT_OBFUSCATOR_TYPES[3],
@@ -775,14 +775,14 @@ if __name__ == "__main__":
     parser.add_argument(
         "-i",
         "--input_file_name",
-        help = "The name of the input text file.",
+        help = "Mandatory. The name of the input text file.",
         type = str,
         required = True,
     )
     parser.add_argument(
         "-o",
         "--output_file_name",
-        help = "The name of the output text file.",
+        help = "Mandatory. The name of the output text file.",
         type = str,
         required = True,
     )
