@@ -659,7 +659,7 @@ if False :
 def add_noise(
         str_input,
         tpl_str_noise = (
-            '\u200C', # "ZERO WIDTH NON-JOINER" ('␣\u2423' "OPEN BOX" (9251))
+            # '\u200C', # "ZERO WIDTH NON-JOINER" ('␣\u2423' "OPEN BOX" (9251))
             '\u200D', # "ZERO WIDTH JOINER" ('␠\u2420' "SYMBOL FOR SPACE" (9248))
             ),
         noise_insert_percent = 0) :
@@ -779,7 +779,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-n",
         "--noise_insert_percent",
-        help = "Optional. Default: 0. Range [0; 100]. Probabilty percent for ZERO WIDTH (NON-)JOINER characters to be randomly inserted between each adjacent pair of letters.",
+        help = "Optional. Default: 0. Range [0; 100]. Probabilty percent for ZERO WIDTH JOINER characters to be randomly inserted between each adjacent pair of letters.",
         type = int,
         required = False,
     )
