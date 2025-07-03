@@ -690,12 +690,15 @@ def add_gaps(
             '\u2004',       # "THREE-PER-EM SPACE (thick space)" (333)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
-        ):
+        set_str_orig_spaces = {'\u0020',}, # "SPACE" width 260
+        ) :
     str_output = ''.join('%s%s' % (
-        (choice(tpl_str_alt_spaces) if str_input[i].isspace() else str_input[i]),
+        (choice(tpl_str_alt_spaces) if (
+            str_input[i] in set_str_orig_spaces)
+            else str_input[i]),
         (str_gap if (not str_input[i].isspace() and
-                      (i + 1) < len(str_input) and
-                      not str_input[i + 1].isspace()) else ''))
+                     (i + 1) < len(str_input) and
+                     not str_input[i + 1].isspace()) else ''))
         for i in range(len(str_input)))
     return str_output
 
