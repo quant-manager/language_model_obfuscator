@@ -76,7 +76,7 @@
 | U+202F    |   166 | "NARROW NO-BREAK SPACE". Narrower than "NO-BREAK SPACE". Typically the width of a thin space or a mid space". Width might vary.
 | U+200A    |   100 | "HAIR SPACE". Narrower than "THIN SPACE". Width might vary.
 | U+200B    |     0 | "ZERO WIDTH SPACE". Width zero! Apply between space and non-space or between non-space and space. Literally a zero-width space character. It is used to indicate a word break opportunity without actually inserting a visible space. It is also used in some programming languages to indicate a non-breaking space.
-| U+FEFF    |     0 | "ZERO WIDTH NO-BREAK SPACE". Width zero! Apply between non-space and non-space.
+| U+FEFF    |     0 | "ZERO WIDTH NO-BREAK SPACE". Width zero! Apply between non-space.
 | U+180E    |     0 | "MONGOLIAN VOWEL SEPARATOR". Width zero!
 +-----------+-------+
 * The characters U+2000...U+2006, when implemented in a font, usually have the
@@ -127,7 +127,6 @@ import argparse
 from pathlib import Path
 from random import seed, choice, random
 from datetime import datetime
-import numpy as np
 
 
 ###############################################################################
@@ -609,7 +608,7 @@ if False :
     # str_in = 'ôcaoA'
     str_in = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz ,-.:;'
     str_out = ''.join(tuple(map(
-        lambda x: choice(DICT_OBFUSCATOR_RANDOM_ALL.get(x+x, x)), str_in)))
+        lambda x : choice(DICT_OBFUSCATOR_RANDOM_ALL.get(x + x, x)), str_in)))
     print(str_in)
     print(str_out)
 
@@ -662,45 +661,114 @@ def add_noise(
             # '\u200C', # "ZERO WIDTH NON-JOINER" ('␣\u2423' "OPEN BOX" (9251))
             '\u200D', # "ZERO WIDTH JOINER" ('␠\u2420' "SYMBOL FOR SPACE" (9248))
             ),
-        noise_insert_percent = 0) :
+        noise_insertion_percent = 0) :
 
-    if noise_insert_percent > 0 :
-        flt_noise_insert_prob = noise_insert_percent / 100.
+    if len(tpl_str_noise) > 0 and noise_insertion_percent > 0 :
+        flt_noise_insertion_prob = noise_insertion_percent / 100.
         str_output = ''.join('%s%s' % (
             str_input[i], choice(tpl_str_noise)
             if (str_input[i].isalpha() and
-                i < len(str_input) and
+                (i + 1) < len(str_input) and
                 str_input[i + 1].isalpha() and
-                random() <= flt_noise_insert_prob) else '')
+                random() <= flt_noise_insertion_prob) else '')
             for i in range(len(str_input)))
     else :
         str_output = str_input
     return str_output
 
 
+def add_gaps(
+        str_input,
+        tpl_str_alt_spaces = (
+            '\u2800\u200A', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
+            '\u200A\u2800', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
+            '\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
+            '\u200A\uFFA0', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u205F\u200A', # "MEDIUM MATHEMATICAL SPACE" (222) + "HAIR SPACE" (100)
+            '\u200A\u205F', # "HAIR SPACE" (100) + "MEDIUM MATHEMATICAL SPACE" (222)
+            '\u3164',       # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
+            '\u2004',       # "THREE-PER-EM SPACE (thick space)" (333)
+            ),
+        str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
+        ):
+    str_output = ''.join('%s%s' % (
+        (choice(tpl_str_alt_spaces) if str_input[i].isspace() else str_input[i]),
+        (str_gap if (not str_input[i].isspace() and
+                      (i + 1) < len(str_input) and
+                      not str_input[i + 1].isspace()) else ''))
+        for i in range(len(str_input)))
+    return str_output
+
+
+def remove_gaps(
+        str_input,
+        tpl_str_alt_spaces = (
+            '\u2800\u200A', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
+            '\u200A\u2800', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
+            '\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
+            '\u200A\uFFA0', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u205F\u200A', # "MEDIUM MATHEMATICAL SPACE" (222) + "HAIR SPACE" (100)
+            '\u200A\u205F', # "HAIR SPACE" (100) + "MEDIUM MATHEMATICAL SPACE" (222)
+            '\u3164',       # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
+            '\u2004',       # "THREE-PER-EM SPACE (thick space)" (333)
+            ),
+        str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
+        str_orig_space = '\u0020', # "SPACE" width 260
+        ) :
+    set_str_alt_spaces = set("".join(tpl_str_alt_spaces))
+    set_str_alt_spaces.remove(str_gap)
+    str_intermediate_output = ''.join([
+        str_orig_space if str_input[i] in set_str_alt_spaces else str_input[i]
+        for i in range(len(str_input))])
+    str_output = ''.join([
+        '' if str_input[i] == str_gap else str_input[i]
+        for i in range(len(str_intermediate_output))])
+    return str_output
+
+
 def obfuscate(
         dict_obfuscator, integer_random_seed,
         input_file_name, output_file_name,
-        noise_insert_percent = 0, verbosity = 0) :
+        gaps_insertion_flag = 0,
+        noise_insertion_percent = 0,
+        verbosity_flag = 0,
+        reverse_obfuscation_flag = 0) :
+
     if integer_random_seed is None :
         seed(datetime.now().timestamp())
     else :
         seed(a = integer_random_seed)
+
     with open(input_file_name, 'r', encoding='utf-8') as file:
-        str_in = file.read()
-    str_out = add_noise( # must be called before obfuscation
-        str_input = str_in,
-        noise_insert_percent = noise_insert_percent,)
-    str_out = ''.join(tuple(map(lambda x: choice(
-        dict_obfuscator.get(x+x, x)), str_out)))
-    if verbosity == 1 :
+        str_input = file.read()
+
+    str_output = str_input
+    if gaps_insertion_flag :
+        # "gaps" and "noise" are mutually exclusive!
+        if reverse_obfuscation_flag :
+            str_output = remove_gaps(str_input = str_output,)
+        else :
+            str_output = add_gaps(str_input = str_output,)
+
+    if noise_insertion_percent > 0 :
+        # Adding noise  must be done before obfuscation
+        str_output = add_noise(
+            str_input = str_output,
+            noise_insertion_percent = noise_insertion_percent,)
+
+    # obfuscation
+    str_output = ''.join(tuple(map(lambda x : choice(
+        dict_obfuscator.get(x + x, x)), str_output)))
+
+    if verbosity_flag == 1 :
         print("Input file:\n")
-        print(str_in)
+        print(str_input)
         print("Output file:\n")
-        print(str_out)
+        print(str_output)
         print()
+
     with open(output_file_name, "w", encoding='utf-8') as file:
-        file.write(str_out)
+        file.write(str_output)
 
 
 def revert_obfuscator(dict_obfuscator) :
@@ -716,20 +784,22 @@ def main(
          input_file_name : str,
          output_file_name : str,
          integer_random_seed : int = None,
-         noise_insert_percent : int = None,
-         verbosity : int = None,
-         reverse_obfuscation : int = None,
+         gaps_insertion_flag : int = None,
+         noise_insertion_percent : int = None,
+         verbosity_flag : int = None,
+         reverse_obfuscation_flag : int = None,
          ) :
-    noise_insert_percent = 0 if noise_insert_percent is None else noise_insert_percent
-    verbosity = 0 if verbosity is None else verbosity
-    reverse_obfuscation = 0 if reverse_obfuscation is None else reverse_obfuscation
+    gaps_insertion_flag = 0 if gaps_insertion_flag is None else gaps_insertion_flag
+    noise_insertion_percent = 0 if noise_insertion_percent is None else noise_insertion_percent
+    verbosity_flag = 0 if verbosity_flag is None else verbosity_flag
+    reverse_obfuscation_flag = 0 if reverse_obfuscation_flag is None else reverse_obfuscation_flag
     if 1 <= obfuscator_type_index <= 5 :
         if Path(input_file_name).is_file() :
             if not Path(output_file_name).is_dir() :
                 if Path(output_file_name).is_file() :
                     Path(output_file_name).unlink()
                 if not Path(output_file_name).is_file() :
-                    if verbosity == 1 :
+                    if verbosity_flag == 1 :
                         print("Obfuscator type: " +
                               DICT_OBFUSCATOR_TYPES[obfuscator_type_index])
                         print("Input file name: " + input_file_name)
@@ -745,7 +815,7 @@ def main(
                     dict_obfuscator = lst_dict_obfuscators[
                         obfuscator_type_index - 1]
                     validate_obfuscator(dict_obfuscator = dict_obfuscator)
-                    if reverse_obfuscation != 0 :
+                    if reverse_obfuscation_flag != 0 :
                         dict_obfuscator = revert_obfuscator(
                             dict_obfuscator = dict_obfuscator)
                     obfuscate(
@@ -753,8 +823,10 @@ def main(
                         integer_random_seed = integer_random_seed,
                         input_file_name = input_file_name,
                         output_file_name = output_file_name,
-                        noise_insert_percent = noise_insert_percent,
-                        verbosity = verbosity,)
+                        gaps_insertion_flag = gaps_insertion_flag,
+                        noise_insertion_percent = noise_insertion_percent,
+                        verbosity_flag = verbosity_flag,
+                        reverse_obfuscation_flag = reverse_obfuscation_flag,)
                 else :
                     raise FileExistsError(
                         "Output text file cannot be removed.")
@@ -777,22 +849,29 @@ if __name__ == "__main__":
         required = False,
     )
     parser.add_argument(
+        "-g",
+        "--gaps_insertion_flag",
+        help = "Optional. Default: 0. Insert spaces of different types, and replace orginal spaces.",
+        type = int,
+        required = False,
+    )
+    parser.add_argument(
         "-n",
-        "--noise_insert_percent",
+        "--noise_insertion_percent",
         help = "Optional. Default: 0. Range [0; 100]. Probabilty percent for ZERO WIDTH JOINER characters to be randomly inserted between each adjacent pair of letters.",
         type = int,
         required = False,
     )
     parser.add_argument(
         "-v",
-        "--verbosity",
+        "--verbosity_flag",
         help = "Optional. Default: 0. Output verbosity integer at 0 for no traces and 1 for generating traces.",
         type = int,
         required = False,
     )
     parser.add_argument(
         "-r",
-        "--reverse_obfuscation",
+        "--reverse_obfuscation_flag",
         help = "Optional. Default: 0. Run reverse obfuscation to recover original text file (1) or forward obfuscation (0).",
         type = int,
         required = False,

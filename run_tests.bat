@@ -1,6 +1,6 @@
 python .\lmo.py -h
 
-REM: obfuscate with five different methods without noise:
+REM: obfuscate with five different methods without noise/gaps:
 python .\lmo.py -s 12345 -v 1 -r 0 -t 1 -i .\data\input\in.txt -o .\data\output\out1.txt
 python .\lmo.py -s 12345 -v 1 -r 0 -t 2 -i .\data\input\in.txt -o .\data\output\out2.txt
 python .\lmo.py -s 12345 -v 1 -r 0 -t 3 -i .\data\input\in.txt -o .\data\output\out3.txt
@@ -14,7 +14,14 @@ python .\lmo.py -s 54321 -n 25 -v 1 -r 0 -t 3 -i .\data\input\in.txt -o .\data\o
 python .\lmo.py -s 54321 -n 25 -v 1 -r 0 -t 4 -i .\data\input\in.txt -o .\data\output\out_noisy4.txt
 python .\lmo.py -s 54321 -n 25 -v 1 -r 0 -t 5 -i .\data\input\in.txt -o .\data\output\out_noisy5.txt
 
-REM: reverse obfuscation and recovery of the original input with five different methods without noise:
+REM: obfuscate with five different methods with gaps:
+python .\lmo.py -s 67890 -g 1 -v 1 -r 0 -t 1 -i .\data\input\in.txt -o .\data\output\out_gaps1.txt
+python .\lmo.py -s 67890 -g 1 -v 1 -r 0 -t 2 -i .\data\input\in.txt -o .\data\output\out_gaps2.txt
+python .\lmo.py -s 67890 -g 1 -v 1 -r 0 -t 3 -i .\data\input\in.txt -o .\data\output\out_gaps3.txt
+python .\lmo.py -s 67890 -g 1 -v 1 -r 0 -t 4 -i .\data\input\in.txt -o .\data\output\out_gaps4.txt
+python .\lmo.py -s 67890 -g 1 -v 1 -r 0 -t 5 -i .\data\input\in.txt -o .\data\output\out_gaps5.txt
+
+REM: reverse obfuscation and recovery of the original input with five different methods without noise/gaps:
 python .\lmo.py -v 1 -r 1 -t 1 -i .\data\output\out1.txt -o .\data\recovered\in1.txt
 python .\lmo.py -v 1 -r 1 -t 2 -i .\data\output\out2.txt -o .\data\recovered\in2.txt
 python .\lmo.py -v 1 -r 1 -t 3 -i .\data\output\out3.txt -o .\data\recovered\in3.txt
@@ -27,3 +34,10 @@ python .\lmo.py -v 1 -r 1 -t 2 -i .\data\output\out_noisy2.txt -o .\data\recover
 python .\lmo.py -v 1 -r 1 -t 3 -i .\data\output\out_noisy3.txt -o .\data\recovered\in_noisy3.txt
 python .\lmo.py -v 1 -r 1 -t 4 -i .\data\output\out_noisy4.txt -o .\data\recovered\in_noisy4.txt
 python .\lmo.py -v 1 -r 1 -t 5 -i .\data\output\out_noisy5.txt -o .\data\recovered\in_noisy5.txt
+
+REM: reverse obfuscation and recovery of the original input with five different methods with gaps:
+python .\lmo.py -g 1 -v 1 -r 1 -t 1 -i .\data\output\out_gaps1.txt -o .\data\recovered\in_gaps1.txt
+python .\lmo.py -g 1 -v 1 -r 1 -t 2 -i .\data\output\out_gaps2.txt -o .\data\recovered\in_gaps2.txt
+python .\lmo.py -g 1 -v 1 -r 1 -t 3 -i .\data\output\out_gaps3.txt -o .\data\recovered\in_gaps3.txt
+python .\lmo.py -g 1 -v 1 -r 1 -t 4 -i .\data\output\out_gaps4.txt -o .\data\recovered\in_gaps4.txt
+python .\lmo.py -g 1 -v 1 -r 1 -t 5 -i .\data\output\out_gaps5.txt -o .\data\recovered\in_gaps5.txt
