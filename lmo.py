@@ -75,7 +75,7 @@
 | U+2009    |   166 | "THIN SPACE". 1/5 em (or sometimes 1/6 em). Width might vary. Unnecessary risk: may get adjusted
 | U+202F    |   166 | "NARROW NO-BREAK SPACE". Narrower than "NO-BREAK SPACE". Typically the width of a thin space or a mid space". Width might vary.
 | U+200A    |   100 | "HAIR SPACE". Narrower than "THIN SPACE". Width might vary.
-| U+200B... |     0 | "ZERO WIDTH SPACE". Width zero! Apply between space and non-space or between non-space and space. Literally a zero-width space character. It is used to indicate a word break opportunity without actually inserting a visible space. It is also used in some programming languages to indicate a non-breaking space.
+| U+200B    |     0 | "ZERO WIDTH SPACE". Width zero! Apply between space and non-space or between non-space and space. Literally a zero-width space character. It is used to indicate a word break opportunity without actually inserting a visible space. It is also used in some programming languages to indicate a non-breaking space.
 | U+FEFF    |     0 | "ZERO WIDTH NO-BREAK SPACE". Width zero! Apply between non-space and non-space.
 | U+180E    |     0 | "MONGOLIAN VOWEL SEPARATOR". Width zero!
 +-----------+-------+
