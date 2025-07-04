@@ -1,2 +1,1 @@
-ABC‍D‌EFGH‌IJK‍L‌MN‍OP‌Q‍R‍ST‌UVWX‌Y‍Z
-A‍BCDEFG‍H‍IJKLMN‍OPQRSTUVWXYZﾠabcd‍efgh‍i‍jk‍lmnopq‍rs‍tuvwxy‍zﾠ,-.:;
+ABC﻿DEFGHI᠎JK﻿LM‍N﻿OPQRS᠎T﻿UVWXY﻿Zﾠa᠎b‍cdefghi﻿jklmnopqrstuvwx‍yzﾠ,-.:;
