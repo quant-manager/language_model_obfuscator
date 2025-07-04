@@ -708,9 +708,13 @@ def remove_noise(
 def add_gaps(
         str_input,
         tpl_str_alt_spaces = (
+            '\u2800\u200A\u200A', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
             '\u200A\u2800\u200A', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
+            '\u200A\u200A\u2800', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
+            '\uFFA0\u200A\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
             '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
-            '\u3164',       # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
+            '\u200A\u200A\uFFA0', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u3164',             # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         set_str_orig_spaces = {'\u0020',}, # "SPACE" width 260
@@ -729,9 +733,13 @@ def add_gaps(
 def remove_gaps(
         str_input,
         tpl_str_alt_spaces = (
+            '\u2800\u200A\u200A', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
             '\u200A\u2800\u200A', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
+            '\u200A\u200A\u2800', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
+            '\uFFA0\u200A\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
             '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
-            '\u3164',       # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
+            '\u200A\u200A\uFFA0', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u3164',             # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         str_orig_space = '\u0020', # "SPACE" width 260
