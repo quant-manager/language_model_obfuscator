@@ -667,6 +667,11 @@ def add_noise(
             # '\u200C', # "ZERO WIDTH NON-JOINER" ('␣\u2423' "OPEN BOX" (9251))
             '\u200D', # "ZERO WIDTH JOINER" ('␠\u2420' "SYMBOL FOR SPACE" (9248))
             ),
+        set_non_alpha = {
+            '\u2800', # "BRAILLE PATTERN BLANK" "isalpha" is False
+            '\uFFA0', # "HALFWIDTH HANGUL FILLER" "isalpha" is True
+            '\u3164', # "HANGUL FILLER" "isalpha" is True
+            },
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         noise_insertion_percent = 0) :
 
@@ -674,9 +679,10 @@ def add_noise(
         flt_noise_insertion_prob = noise_insertion_percent / 100.
         str_output = ''.join('%s%s' % (
             str_input[i], choice(tpl_str_noise)
-            if ((str_input[i].isalpha() or str_input[i] == str_gap) and
+            if (((str_input[i].isalpha() and str_input[i] not in set_non_alpha)
+                 or str_input[i] == str_gap) and
                 (i + 1) < len(str_input) and
-                str_input[i + 1].isalpha() and
+                (str_input[i+1].isalpha() and str_input[i+1] not in set_non_alpha) and
                 random() <= flt_noise_insertion_prob) else '')
             for i in range(len(str_input)))
     else :
@@ -702,10 +708,8 @@ def remove_noise(
 def add_gaps(
         str_input,
         tpl_str_alt_spaces = (
-            '\u2800\u200A', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
-            '\u200A\u2800', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
-            '\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
-            '\u200A\uFFA0', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u200A\u2800\u200A', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
+            '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
             '\u3164',       # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
@@ -725,10 +729,8 @@ def add_gaps(
 def remove_gaps(
         str_input,
         tpl_str_alt_spaces = (
-            '\u2800\u200A', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
-            '\u200A\u2800', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
-            '\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
-            '\u200A\uFFA0', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u200A\u2800\u200A', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
+            '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
             '\u3164',       # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
