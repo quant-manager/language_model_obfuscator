@@ -19,7 +19,7 @@
 ###############################################################################
 # The program obfuscates selected "Basic Latin" characters (mostly letters)
 # from the Unicode range [0000; 007F]. Some or all characters from the
-# above range are replaced with similar-looking characters either randomly or
+# above range are replaced with look-alike characters either randomly or
 # deterministically. While the obfuscated text still remains human-readable,
 # language models will fail to use this obfuscated text for their productive
 # training without reverse-obfuscation of this new text during their training
@@ -138,12 +138,23 @@ from datetime import datetime
 ###############################################################################
 
 
-# 1. Obfuscator deterministic/full replacement
+# 1. Obfuscator deterministic/full replacement of spaces only.
+DICT_OBFUSCATOR_DETER_FULL_SPACES = {
+    # Optionally insert these zero-width spaces between letters of a word:
+    '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
+    #
+    # "SPACE" -> {"HALFWIDTH HANGUL FILLER"}.
+    ' \u0020' : 'ﾠ\uFFA0',
+}
+
+
+# 2. Obfuscator deterministic/full replacement
 #    Replace "Basic Latin" (0000-007F) with "Fullwidth Form"(FF00-FFEF).
 DICT_OBFUSCATOR_DETER_FULL_FWF = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
     #
+    # "SPACE" -> {"IDEOGRAPHIC SPACE"}.
     ' \u0020' : '　\u3000',
     #
     '!\u0021' : '！\uFF01',
@@ -252,13 +263,14 @@ DICT_OBFUSCATOR_DETER_FULL_FWF = {
 }
 
 
-# 2. Obfuscator deterministic/full replacement
+# 3. Obfuscator deterministic/full replacement
 #    (using visually best replacement choice for each original letter).
 DICT_OBFUSCATOR_DETER_FULL = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
     #
-    ' \u0020' : '⠀\u2800', # BRAILLE PATTERN BLANK; it does not act as a space
+    # "SPACE" -> {"BRAILLE PATTERN BLANK"}.
+    ' \u0020' : '⠀\u2800',
     #
     ',\u002C' : '‚\u201A', # 'ˏ\02CF¸\u00B8'
     '-\u002D' : '‐\u2010', # '‑\u2011⁃\u2043−\u2212'
@@ -322,12 +334,13 @@ DICT_OBFUSCATOR_DETER_FULL = {
 }
 
 
-# 3. Obfuscator random/full replacement.
+# 4. Obfuscator random/full replacement.
 DICT_OBFUSCATOR_RANDOM_FULL = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
     #
-    # "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE"; "HALFWIDTH HANGUL FILLER"
+    # "SPACE" -> {"BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE";
+    #             "HALFWIDTH HANGUL FILLER"}.
     ' \u0020' : '⠀\u2800 \u2005ﾠ\uFFA0',
     #
     ',\u002C' : '‚\u201A', # 'ˏ\02CF¸\u00B8'
@@ -392,12 +405,13 @@ DICT_OBFUSCATOR_RANDOM_FULL = {
 }
 
 
-# 4. Obfuscator random/partial replacement.
+# 5. Obfuscator random/partial replacement.
 DICT_OBFUSCATOR_RANDOM_PARTIAL = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
     #
-    # "SPACE"; "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE"; "HALFWIDTH HANGUL FILLER"
+    # "SPACE" -> {"SPACE"; "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE";
+    #             "HALFWIDTH HANGUL FILLER"}.
     ' \u0020' : ' \u0020⠀\u2800 \u2005ﾠ\uFFA0',
     #
     ',\u002C' : ',\u002C‚\u201A', # 'ˏ\u02CF¸\u00B8'
@@ -461,14 +475,14 @@ DICT_OBFUSCATOR_RANDOM_PARTIAL = {
     'z\u007A' : 'z\u007Aᴢ\u1D22',
 }
 
-# 5. Obfuscator random/partial replacement using all candidate symbols.
+# 6. Obfuscator random/partial replacement using all candidate symbols.
 DICT_OBFUSCATOR_RANDOM_ALL = {
     # Optionally insert these zero-width spaces between letters of a word:
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
     #
-    # "SPACE"; "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE"; "HANGUL FILLER";
-    # "HALFWIDTH HANGUL FILLER"; "NO-BREAK SPACE".
-    ' \u0020' : ' \u0020⠀\u2800 \u2005ㅤ\u3164ﾠ\uFFA0\u00A0\u00A0',
+    # "SPACE" -> {"SPACE"; "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE";
+    #             "HALFWIDTH HANGUL FILLER"; "NO-BREAK SPACE"; "HANGUL FILLER"}.
+    ' \u0020' : ' \u0020⠀\u2800 \u2005ﾠ\uFFA0\u00A0\u00A0ㅤ\u3164',
     #
     ',\u002C' : ',\u002C‚\u201Aˏ\u02CF¸\u00B8',
     '-\u002D' : '-\u002D‐\u2010‑\u2011⁃\u2043−\u2212',
@@ -533,11 +547,12 @@ DICT_OBFUSCATOR_RANDOM_ALL = {
 
 
 DICT_OBFUSCATOR_TYPES = {
-    1 : "1. Deterministic full replacement with paired Fullwidth Form symbols.",
-    2 : "2. Deterministic full replacement with the most similar symbols.",
-    3 : "3. Random full replacement with various very similar symbols.",
-    4 : "4. Random partial replacement with various very similar symbols.",
-    5 : "5. Random partial replacement with various somewhat similar symbols.",
+    1 : "1. Deterministic full replacement of spaces only.",
+    2 : "2. Deterministic full replacement with paired Fullwidth Form symbols.",
+    3 : "3. Deterministic full replacement with the most look-alike symbols.",
+    4 : "4. Random full replacement with various very look-alike symbols.",
+    5 : "5. Random partial replacement with various very look-alike symbols.",
+    6 : "6. Random partial replacement with various somewhat look-alike symbols.",
 }
 
 '''
@@ -587,6 +602,7 @@ def validate_obfuscator(dict_obfuscator) :
 
 # Unit test for Obfuscators:
 if False :
+    validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_DETER_FULL_SPACES)
     validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_DETER_FULL_FWF)
     validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_DETER_FULL)
     validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_RANDOM_FULL)
@@ -675,12 +691,11 @@ def remove_noise(
             '\u200D', # "ZERO WIDTH JOINER" ('␠\u2420' "SYMBOL FOR SPACE" (9248))
             ),
         ) :
+    str_output = str_input
     if len(tpl_str_noise) > 0 :
         set_str_noise = set(tpl_str_noise)
-        str_output = ''.join(str_input[i] if str_input[i] not in set_str_noise
-                             else '' for i in range(len(str_input)))
-    else :
-        str_output = str_input
+        str_output = ''.join(str_output[i] if str_output[i] not in set_str_noise
+                             else '' for i in range(len(str_output)))
     return str_output
 
 
@@ -721,12 +736,13 @@ def remove_gaps(
         ) :
     set_str_alt_spaces = set("".join(tpl_str_alt_spaces))
     set_str_alt_spaces.remove(str_gap)
-    str_intermediate_output = ''.join([
-        str_orig_space if str_input[i] in set_str_alt_spaces else str_input[i]
-        for i in range(len(str_input))])
+    str_output = str_input
     str_output = ''.join([
-        '' if str_input[i] == str_gap else str_input[i]
-        for i in range(len(str_intermediate_output))])
+        str_orig_space if str_output[i] in set_str_alt_spaces else str_output[i]
+        for i in range(len(str_output))])
+    str_output = ''.join([
+        '' if str_output[i] == str_gap else str_output[i]
+        for i in range(len(str_output))])
     return str_output
 
 
@@ -799,7 +815,7 @@ def main(
     noise_insertion_percent = 0 if noise_insertion_percent is None else noise_insertion_percent
     verbosity_flag = 0 if verbosity_flag is None else verbosity_flag
     reverse_obfuscation_flag = 0 if reverse_obfuscation_flag is None else reverse_obfuscation_flag
-    if 1 <= obfuscator_type_index <= 5 :
+    if 1 <= obfuscator_type_index <= 6 :
         if Path(input_file_name).is_file() :
             if not Path(output_file_name).is_dir() :
                 if Path(output_file_name).is_file() :
@@ -812,6 +828,7 @@ def main(
                         print("Output file name: " + output_file_name)
                         print()
                     lst_dict_obfuscators = [
+                        DICT_OBFUSCATOR_DETER_FULL_SPACES,
                         DICT_OBFUSCATOR_DETER_FULL_FWF,
                         DICT_OBFUSCATOR_DETER_FULL,
                         DICT_OBFUSCATOR_RANDOM_FULL,
@@ -842,7 +859,7 @@ def main(
         else :
             raise FileNotFoundError("Input text file does not exist.")
     else :
-        raise ValueError("Obfuscator type index must be beterrn 1 and 5.")
+        raise ValueError("Obfuscator type index must be between 1 and 6.")
 
 
 if __name__ == "__main__":
@@ -886,12 +903,13 @@ if __name__ == "__main__":
         "-t",
         "--obfuscator_type_index",
         help = '\n'.join((
-            "Mandatory. The index of the obfuscator type in range from 1 to 5:",
+            "Mandatory. The index of the obfuscator type in range from 1 to 6:",
             DICT_OBFUSCATOR_TYPES[1],
             DICT_OBFUSCATOR_TYPES[2],
             DICT_OBFUSCATOR_TYPES[3],
             DICT_OBFUSCATOR_TYPES[4],
             DICT_OBFUSCATOR_TYPES[5],
+            DICT_OBFUSCATOR_TYPES[6],
             "\n")),
         type = int,
         required = True,

@@ -1,2 +1,2 @@
 ABCD␣EFGH␣IJKL␣MNOP␣QRST␣UVWX␣YZ
-ABCDEFGHIJKLMNOPQRSTUVWXYZﾠabcdefghijklmnopqrstuvwxyz ,-.:;
+ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz ,-.:;
