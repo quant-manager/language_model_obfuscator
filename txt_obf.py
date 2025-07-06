@@ -34,6 +34,7 @@
 # https://www.digitalocean.com/community/tutorials/
 #         how-to-work-with-unicode-in-python
 # https://symbl.cc/en/unicode-table
+# https://symbl.cc/en/unicode-table/#mathematical-alphanumeric-symbols
 # https://www.reuters.com/sustainability/boards-policy-regulation/
 #         meta-fends-off-authors-us-copyright-lawsuit-over-ai-2025-06-25/
 # https://jkorpela.fi/chars/spaces.html
@@ -275,6 +276,41 @@ DICT_OBFUSCATOR_DETER_FULL_FWF = {
     '¥\u00A5' : '￥\uFFE5',
     '·\u00B7' : '･\uFF65',
 }
+
+
+# TODO: add more font-specific obfuscations using the following sets of symbols:
+# https://symbl.cc/en/unicode-table/#mathematical-alphanumeric-symbols
+
+# Mathematical Bold ('𝐀\U0001D400' - '𝐳\U0001D433').
+# Mathematical Bold Digit ('𝟎\U0001D7CE' - '𝟗\U0001D7D7').
+# ...
+
+# Mathematical Italic ('𝐴\U0001D434' - '𝑧\U0001D467'). Note: "h is missing". Use 'ℎ\u210Eh' instead.
+# ...
+
+# Mathematical Bold Italic ('𝑨\U0001D468' - '𝒛\U0001D49B').
+# ...
+
+# Mathematical Bold Script ('𝓐\U0001D4D0' - '𝔃\U0001D503').
+# ...
+
+# Mathematical Sans-Serif ('𝖠\U0001D5A0' - '𝗓\U0001D5D3').
+# Mathematical Sans-Serif Digit ('𝟢\U0001D7E2' - '𝟫\U0001D7EB').
+# ...
+
+# Mathematical Sans-Serif Bold ('𝗔\U0001D5D4' - '𝘇\U0001D607').
+# Mathematical Sans-Serif Bold Digit ('𝟬\U0001D7EC' - '𝟵\U0001D7F5').
+# ...
+
+# Mathematical Sans-Serif Italic ('𝘈\U0001D608' - '𝘻\U0001D63B').
+# ...
+
+# Mathematical Sans-Serif Bold Italic ('𝘼\U0001D63C' - '𝙯\U0001D66F').
+# ...
+
+# Mathematical Monospace ('𝙰\U0001D670' - '𝚣\U0001D6A3').
+# Mathematical Monospace Digit ('𝟶\U0001D7F6' - '𝟿\U0001D7FF').
+# ...
 
 
 # 5. Obfuscator deterministic/full replacement
