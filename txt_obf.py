@@ -764,16 +764,24 @@ def add_gaps(
             '\uFFA0\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE"
             ),
         str_gap = '\uFFA0', # "HALFWIDTH HANGUL FILLER"
-        set_str_orig_spaces = {'\u0020',}, # "SPACE" width 260
+        str_orig_space = '\u0020', # "SPACE" width 260
+        str_newline_gap = '\u3164', # "HANGUL FILLER"
+        str_orig_newline = '\u000A', # "NEW LINE"
         ) :
+    str_output = str_input
+    str_newline_with_gap = str_newline_gap + str_orig_newline
+    str_output = ''.join((
+        str_newline_with_gap # "HANGUL FILLER" + "NEW LINE"
+        if str_output[i] == str_orig_newline # "NEW LINE"
+        else str_output[i]) for i in range(len(str_output)))
     str_output = ''.join('%s%s' % (
         (choice(tpl_str_alt_spaces) if (
-            str_input[i] in set_str_orig_spaces)
-            else str_input[i]),
-        (str_gap if (not str_input[i].isspace() and
-                     (i + 1) < len(str_input) and
-                     not str_input[i + 1].isspace()) else ''))
-        for i in range(len(str_input)))
+            str_output[i] == str_orig_space)
+            else str_output[i]),
+        (str_gap if (not str_output[i].isspace() and
+                     (i + 1) < len(str_output) and
+                     not str_output[i + 1].isspace()) else ''))
+        for i in range(len(str_output)))
     return str_output
 
 
@@ -790,6 +798,7 @@ def remove_gaps(
             ),
         str_gap = '\uFFA0', # "HALFWIDTH HANGUL FILLER"
         str_orig_space = '\u0020', # "SPACE" width 260
+        str_newline_gap = '\u3164', # "HANGUL FILLER"
         ) :
     set_str_alt_spaces = set("".join(tpl_str_alt_spaces))
     set_str_alt_spaces.remove(str_gap)
@@ -798,7 +807,8 @@ def remove_gaps(
         str_orig_space if str_output[i] in set_str_alt_spaces else str_output[i]
         for i in range(len(str_output))])
     str_output = ''.join([
-        '' if str_output[i] == str_gap else str_output[i]
+        '' if str_output[i] == str_gap or str_output[i] == str_newline_gap
+        else str_output[i]
         for i in range(len(str_output))])
     return str_output
 
