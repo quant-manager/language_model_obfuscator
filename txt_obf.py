@@ -759,8 +759,9 @@ def add_gaps(
             '\uFFA0\u200A\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
             '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
             '\u200A\u200A\uFFA0', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
-            '\u200A\u3164',       # "HAIR SPACE" (100) + "HANGUL FILLER"
-            '\u3164\u200A',       # "HANGUL FILLER" + "HAIR SPACE" (100)
+            '\u3164\u200A\u200A', # "HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
+            '\u200A\u3164\u200A', # "HAIR SPACE" (100) + "HANGUL FILLER" + "HAIR SPACE" (100)
+            '\u200A\u200A\u3164', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HANGUL FILLER"
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         set_str_orig_spaces = {'\u0020',}, # "SPACE" width 260
@@ -785,8 +786,9 @@ def remove_gaps(
             '\uFFA0\u200A\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
             '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
             '\u200A\u200A\uFFA0', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
-            '\u200A\u3164',       # "HAIR SPACE" (100) + "HANGUL FILLER"
-            '\u3164\u200A',       # "HANGUL FILLER" + "HAIR SPACE" (100)
+            '\u3164\u200A\u200A', # "HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
+            '\u200A\u3164\u200A', # "HAIR SPACE" (100) + "HANGUL FILLER" + "HAIR SPACE" (100)
+            '\u200A\u200A\u3164', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HANGUL FILLER"
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         str_orig_space = '\u0020', # "SPACE" width 260
