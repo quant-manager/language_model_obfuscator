@@ -753,24 +753,33 @@ def remove_noise(
 def add_gaps(
         str_input,
         tpl_str_alt_spaces = (
-            '\u2800\u200A\u200A', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
-            '\u200A\u2800\u200A', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
-            '\u200A\u200A\u2800', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
-            '\uFFA0\u200A\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
-            '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
-            '\u200A\u200A\uFFA0', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
-            '\u3164\u200A\u200A', # "HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
-            '\u200A\u3164\u200A', # "HAIR SPACE" (100) + "HANGUL FILLER" + "HAIR SPACE" (100)
-            '\u200A\u200A\u3164', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HANGUL FILLER"
+            '\u2800\u200A\uFFA0', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u200A\u2800\uFFA0', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK" + "HALFWIDTH HANGUL FILLER"
+            '\uFFA0\u200A\u2800', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
+            #
+            '\u2800\uFFA0\u200A', # "BRAILLE PATTERN BLANK" + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
+            '\uFFA0\u2800\u200A', # "HALFWIDTH HANGUL FILLER" + "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
+            '\u200A\uFFA0\u2800', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "BRAILLE PATTERN BLANK"
+            #
+            '\u3164\u200A\uFFA0', # "HANGUL FILLER" + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u200A\u3164\uFFA0', # "HAIR SPACE" (100) + "HANGUL FILLER" + "HALFWIDTH HANGUL FILLER"
+            '\uFFA0\u200A\u3164', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HANGUL FILLER"
+            #
+            '\u3164\uFFA0\u200A', # "HANGUL FILLER" + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
+            '\uFFA0\u3164\u200A', # "HALFWIDTH HANGUL FILLER" + "HANGUL FILLER" + "HAIR SPACE" (100)
+            '\u200A\uFFA0\u3164', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HANGUL FILLER"
             ),
-        str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
+        tpl_str_gaps = (
+            '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
+            '\uFFA0', # "HALFWIDTH HANGUL FILLER"
+            ),
         set_str_orig_spaces = {'\u0020',}, # "SPACE" width 260
         ) :
     str_output = ''.join('%s%s' % (
         (choice(tpl_str_alt_spaces) if (
             str_input[i] in set_str_orig_spaces)
             else str_input[i]),
-        (str_gap if (not str_input[i].isspace() and
+        (choice(tpl_str_gaps) if (not str_input[i].isspace() and
                      (i + 1) < len(str_input) and
                      not str_input[i + 1].isspace()) else ''))
         for i in range(len(str_input)))
@@ -780,27 +789,38 @@ def add_gaps(
 def remove_gaps(
         str_input,
         tpl_str_alt_spaces = (
-            '\u2800\u200A\u200A', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
-            '\u200A\u2800\u200A', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
-            '\u200A\u200A\u2800', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
-            '\uFFA0\u200A\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
-            '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
-            '\u200A\u200A\uFFA0', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
-            '\u3164\u200A\u200A', # "HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
-            '\u200A\u3164\u200A', # "HAIR SPACE" (100) + "HANGUL FILLER" + "HAIR SPACE" (100)
-            '\u200A\u200A\u3164', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HANGUL FILLER"
+            '\u2800\u200A\uFFA0', # "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u200A\u2800\uFFA0', # "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK" + "HALFWIDTH HANGUL FILLER"
+            '\uFFA0\u200A\u2800', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "BRAILLE PATTERN BLANK"
+            #
+            '\u2800\uFFA0\u200A', # "BRAILLE PATTERN BLANK" + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
+            '\uFFA0\u2800\u200A', # "HALFWIDTH HANGUL FILLER" + "BRAILLE PATTERN BLANK" + "HAIR SPACE" (100)
+            '\u200A\uFFA0\u2800', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "BRAILLE PATTERN BLANK"
+            #
+            '\u3164\u200A\uFFA0', # "HANGUL FILLER" + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
+            '\u200A\u3164\uFFA0', # "HAIR SPACE" (100) + "HANGUL FILLER" + "HALFWIDTH HANGUL FILLER"
+            '\uFFA0\u200A\u3164', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HANGUL FILLER"
+            #
+            '\u3164\uFFA0\u200A', # "HANGUL FILLER" + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
+            '\uFFA0\u3164\u200A', # "HALFWIDTH HANGUL FILLER" + "HANGUL FILLER" + "HAIR SPACE" (100)
+            '\u200A\uFFA0\u3164', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HANGUL FILLER"
             ),
-        str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
+        tpl_str_gaps = (
+            '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
+            '\uFFA0', # "HALFWIDTH HANGUL FILLER"
+            ),
         str_orig_space = '\u0020', # "SPACE" width 260
         ) :
     set_str_alt_spaces = set("".join(tpl_str_alt_spaces))
-    set_str_alt_spaces.remove(str_gap)
+    for str_gap in tpl_str_gaps :
+        set_str_alt_spaces.remove(str_gap)
+    set_str_gaps = set(tpl_str_gaps)
     str_output = str_input
     str_output = ''.join([
         str_orig_space if str_output[i] in set_str_alt_spaces else str_output[i]
         for i in range(len(str_output))])
     str_output = ''.join([
-        '' if str_output[i] == str_gap else str_output[i]
+        '' if str_output[i] in set_str_gaps else str_output[i]
         for i in range(len(str_output))])
     return str_output
 
