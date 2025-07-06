@@ -780,7 +780,8 @@ def add_gaps(
             else str_output[i]),
         (str_gap if (not str_output[i].isspace() and
                      (i + 1) < len(str_output) and
-                     not str_output[i + 1].isspace()) else ''))
+                     not str_output[i + 1].isspace() and
+                     str_output[i + 1] != str_newline_gap) else ''))
         for i in range(len(str_output)))
     return str_output
 
