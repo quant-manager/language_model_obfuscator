@@ -714,8 +714,9 @@ def add_noise(
             '\u200D', # "ZERO WIDTH JOINER"
             ),
         set_non_alpha = {
-            '\u2800', # "BRAILLE PATTERN BLANK" "isalpha" is False
-            '\u3164', # "HANGUL FILLER" "isalpha" is True
+            '\u2800', # "BRAILLE PATTERN BLANK": "isalpha" is False
+            '\u200A', # "HAIR SPACE": "isalpha" is False
+            '\u3164', # "HANGUL FILLER": "isalpha" is True
             },
         str_gap = '\uFFA0', # "HALFWIDTH HANGUL FILLER"
         noise_insertion_percent = 0) :
@@ -761,9 +762,6 @@ def add_gaps(
             '\u200A\uFFA0\uFFA0', # "HAIR SPACE" + "HALFWIDTH HANGUL FILLER" + "HALFWIDTH HANGUL FILLER"
             '\uFFA0\u200A\uFFA0', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" + "HALFWIDTH HANGUL FILLER"
             '\uFFA0\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE"
-            #
-            '\u3164\uFFA0',       # "HANGUL FILLER" + "HALFWIDTH HANGUL FILLER"
-            '\uFFA0\u3164',       # "HALFWIDTH HANGUL FILLER" + "HANGUL FILLER"
             ),
         str_gap = '\uFFA0', # "HALFWIDTH HANGUL FILLER"
         set_str_orig_spaces = {'\u0020',}, # "SPACE" width 260
@@ -789,9 +787,6 @@ def remove_gaps(
             '\u200A\uFFA0\uFFA0', # "HAIR SPACE" + "HALFWIDTH HANGUL FILLER" + "HALFWIDTH HANGUL FILLER"
             '\uFFA0\u200A\uFFA0', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" + "HALFWIDTH HANGUL FILLER"
             '\uFFA0\uFFA0\u200A', # "HALFWIDTH HANGUL FILLER" + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE"
-            #
-            '\u3164\uFFA0',       # "HANGUL FILLER" + "HALFWIDTH HANGUL FILLER"
-            '\uFFA0\u3164',       # "HALFWIDTH HANGUL FILLER" + "HANGUL FILLER"
             ),
         str_gap = '\uFFA0', # "HALFWIDTH HANGUL FILLER"
         str_orig_space = '\u0020', # "SPACE" width 260
