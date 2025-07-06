@@ -146,8 +146,8 @@ from datetime import datetime
 
 # 1. Obfuscator deterministic/full replacement of spaces only.
 DICT_OBFUSCATOR_DETER_FULL_SPACES = {
-    # "SPACE" -> {"HANGUL FILLER"}.
-    ' \u0020' : 'ㅤ\u3164',
+    # "SPACE" -> {"BRAILLE PATTERN BLANK"}.
+    ' \u0020' : '⠀\u2800',
 }
 
 
@@ -168,8 +168,8 @@ DICT_OBFUSCATOR_RANDOM_PARTIAL_SPACES = {
 # 4. Obfuscator deterministic/full replacement
 #    (using visually best replacement choice for each original letter).
 DICT_OBFUSCATOR_DETER_FULL = {
-    # "SPACE" -> {"HANGUL FILLER"}.
-    ' \u0020' : 'ㅤ\u3164',
+    # "SPACE" -> {"BRAILLE PATTERN BLANK"}.
+    ' \u0020' : '⠀\u2800',
     #
     ',\u002C' : '‚\u201A', # 'ˏ\02CF¸\u00B8'
     '-\u002D' : '‐\u2010', # '‑\u2011⁃\u2043−\u2212'
@@ -372,8 +372,8 @@ DICT_OBFUSCATOR_RANDOM_ALL = {
     '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
     #
     # "SPACE" -> {"SPACE"; "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE";
-    #             "NO-BREAK SPACE"; "HANGUL FILLER"}.
-    ' \u0020' : ' \u0020⠀\u2800 \u2005\u00A0\u00A0ㅤ\u3164',
+    #             "NO-BREAK SPACE"}.
+    ' \u0020' : ' \u0020⠀\u2800 \u2005\u00A0\u00A0',
     #
     ',\u002C' : ',\u002C‚\u201Aˏ\u02CF¸\u00B8',
     '-\u002D' : '-\u002D‐\u2010‑\u2011⁃\u2043−\u2212',
@@ -759,7 +759,8 @@ def add_gaps(
             '\uFFA0\u200A\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
             '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
             '\u200A\u200A\uFFA0', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
-            '\u3164',             # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
+            '\u200A\u3164',       # "HAIR SPACE" (100) + "HANGUL FILLER"
+            '\u3164\u200A',       # "HANGUL FILLER" + "HAIR SPACE" (100)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         set_str_orig_spaces = {'\u0020',}, # "SPACE" width 260
@@ -784,7 +785,8 @@ def remove_gaps(
             '\uFFA0\u200A\u200A', # "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100) + "HAIR SPACE" (100)
             '\u200A\uFFA0\u200A', # "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER" + "HAIR SPACE" (100)
             '\u200A\u200A\uFFA0', # "HAIR SPACE" (100) + "HAIR SPACE" (100) + "HALFWIDTH HANGUL FILLER"
-            '\u3164',             # "HANGUL FILLER" (>300) is wider than "SPACE" (260)
+            '\u200A\u3164',       # "HAIR SPACE" (100) + "HANGUL FILLER"
+            '\u3164\u200A',       # "HANGUL FILLER" + "HAIR SPACE" (100)
             ),
         str_gap = '\u200A', # "HAIR SPACE" width 100 vs "SPACE" width 260
         str_orig_space = '\u0020', # "SPACE" width 260
