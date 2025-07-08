@@ -369,7 +369,7 @@ DICT_OBFUSCATOR_RANDOM_PARTIAL = {
 # 7. Obfuscator random/partial replacement using all candidate symbols.
 DICT_OBFUSCATOR_RANDOM_ALL = {
     # Optionally insert these zero-width spaces between letters of a word:
-    '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
+    # '␣\u2423' : '\u200C\u200C', # "OPEN BOX" (9251) -> "ZERO WIDTH NON-JOINER"
     #
     # "SPACE" -> {"SPACE"; "BRAILLE PATTERN BLANK"; "FOUR-PER-EM SPACE";
     #             "NO-BREAK SPACE"}.
@@ -440,7 +440,7 @@ DICT_OBFUSCATOR_RANDOM_ALL = {
 # 8. Obfuscator deterministic/full replacement.
 #    Replace "Basic Latin" symbols (0000-007F) with
 #    "Fullwidth Form" symbols (FF00-FFEF).
-DICT_OBFUSCATOR_DETER_FULL_FWF = {
+DICT_OBFUSCATOR_DETER_FULL_FONT_FULLWIDTH_FORM = {
     # "SPACE" -> {"IDEOGRAPHIC SPACE"}.
     ' \u0020' : '　\u3000',
     #
@@ -459,6 +459,7 @@ DICT_OBFUSCATOR_DETER_FULL_FWF = {
     '-\u002D' : '－\uFF0D', # '‐\u2010⁃\u2043'
     '.\u002E' : '．\uFF0E',
     '/\u002F' : '／\uFF0F', # '⁄\u2044'
+    #
     '0\u0030' : '０\uFF10',
     '1\u0031' : '１\uFF11',
     '2\u0032' : '２\uFF12',
@@ -469,6 +470,7 @@ DICT_OBFUSCATOR_DETER_FULL_FWF = {
     '7\u0037' : '７\uFF17',
     '8\u0038' : '８\uFF18',
     '9\u0039' : '９\uFF19',
+    #
     ':\u003A' : '：\uFF1A',
     ';\u003B' : '；\uFF1B',
     '<\u003C' : '＜\uFF1C',
@@ -550,39 +552,193 @@ DICT_OBFUSCATOR_DETER_FULL_FWF = {
 }
 
 
-# TODO: add more font-specific obfuscations using the following sets of symbols:
-# https://symbl.cc/en/unicode-table/#mathematical-alphanumeric-symbols
-
-# Mathematical Bold ('𝐀\U0001D400' - '𝐳\U0001D433').
-# Mathematical Bold Digit ('𝟎\U0001D7CE' - '𝟗\U0001D7D7').
-# ...
-
-# Mathematical Italic ('𝐴\U0001D434' - '𝑧\U0001D467'). Note: "h is missing". Use 'ℎ\u210Eh' instead.
-# ...
-
-# Mathematical Bold Italic ('𝑨\U0001D468' - '𝒛\U0001D49B').
-# ...
-
-# Mathematical Bold Script ('𝓐\U0001D4D0' - '𝔃\U0001D503').
-# ...
-
+# 9. Obfuscator deterministic/full replacement.
+#    Replace "Basic Latin" symbols (0000-007F) with
+#    "Mathematical Sans-Serif" (0001D5A0 - 0001D5D3) and
+#    "Mathematical Sans-Serif Digits" symbols (0001D7E2 - 0001D7EB).
 # Mathematical Sans-Serif ('𝖠\U0001D5A0' - '𝗓\U0001D5D3').
 # Mathematical Sans-Serif Digit ('𝟢\U0001D7E2' - '𝟫\U0001D7EB').
-# ...
+# https://symbl.cc/en/unicode-table/#mathematical-alphanumeric-symbols
+DICT_OBFUSCATOR_DETER_FULL_FONT_MATH_SAN_SERIF = {
+    # "SPACE" -> {"BRAILLE PATTERN BLANK"}.
+    ' \u0020' : '⠀\u2800',
+    #
+    ',\u002C' : '‚\u201A', # 'ˏ\02CF¸\u00B8'
+    '-\u002D' : '‐\u2010', # '‑\u2011⁃\u2043−\u2212'
+    '.\u002E' : '․\u2024',
+    ':\u003A' : '։\u0589', # '∶\u2236꞉\uA789'
+    ';\u003B' : ';\u037E', # '⁏\u204F'
+    #
+    '0\u0030' : '𝟢\U0001D7E2',
+    '1\u0031' : '𝟣\U0001D7E3',
+    '2\u0032' : '𝟤\U0001D7E4',
+    '3\u0033' : '𝟥\U0001D7E5',
+    '4\u0034' : '𝟦\U0001D7E6',
+    '5\u0035' : '𝟧\U0001D7E7',
+    '6\u0036' : '𝟨\U0001D7E8',
+    '7\u0037' : '𝟩\U0001D7E9',
+    '8\u0038' : '𝟪\U0001D7EA',
+    '9\u0039' : '𝟫\U0001D7EB',
+    #
+    'A\u0041' : '𝖠\U0001D5A0',
+    'B\u0042' : '𝖡\U0001D5A1',
+    'C\u0043' : '𝖢\U0001D5A2',
+    'D\u0044' : '𝖣\U0001D5A3',
+    'E\u0045' : '𝖤\U0001D5A4',
+    'F\u0046' : '𝖥\U0001D5A5',
+    'G\u0047' : '𝖦\U0001D5A6',
+    'H\u0048' : '𝖧\U0001D5A7',
+    'I\u0049' : '𝖨\U0001D5A8',
+    'J\u004A' : '𝖩\U0001D5A9',
+    'K\u004B' : '𝖪\U0001D5AA',
+    'L\u004C' : '𝖫\U0001D5AB',
+    'M\u004D' : '𝖬\U0001D5AC',
+    'N\u004E' : '𝖭\U0001D5AD',
+    'O\u004F' : '𝖮\U0001D5AE',
+    'P\u0050' : '𝖯\U0001D5AF',
+    'Q\u0051' : '𝖰\U0001D5B0',
+    'R\u0052' : '𝖱\U0001D5B1',
+    'S\u0053' : '𝖲\U0001D5B2',
+    'T\u0054' : '𝖳\U0001D5B3',
+    'U\u0055' : '𝖴\U0001D5B4',
+    'V\u0056' : '𝖵\U0001D5B5',
+    'W\u0057' : '𝖶\U0001D5B6',
+    'X\u0058' : '𝖷\U0001D5B7',
+    'Y\u0059' : '𝖸\U0001D5B8',
+    'Z\u005A' : '𝖹\U0001D5B9',
+    #
+    'a\u0061' : '𝖺\U0001D5BA',
+    'b\u0062' : '𝖻\U0001D5BB',
+    'c\u0063' : '𝖼\U0001D5BC',
+    'd\u0064' : '𝖽\U0001D5BD',
+    'e\u0065' : '𝖾\U0001D5BE',
+    'f\u0066' : '𝖿\U0001D5BF',
+    'g\u0067' : '𝗀\U0001D5C0',
+    'h\u0068' : '𝗁\U0001D5C1',
+    'i\u0069' : '𝗂\U0001D5C2',
+    'j\u006A' : '𝗃\U0001D5C3',
+    'k\u006B' : '𝗄\U0001D5C4',
+    'l\u006C' : '𝗅\U0001D5C5',
+    'm\u006D' : '𝗆\U0001D5C6',
+    'n\u006E' : '𝗇\U0001D5C7',
+    'o\u006F' : '𝗈\U0001D5C8',
+    'p\u0070' : '𝗉\U0001D5C9',
+    'q\u0071' : '𝗊\U0001D5CA',
+    'r\u0072' : '𝗋\U0001D5CB',
+    's\u0073' : '𝗌\U0001D5CC',
+    't\u0074' : '𝗍\U0001D5CD',
+    'u\u0075' : '𝗎\U0001D5CE',
+    'v\u0076' : '𝗏\U0001D5CF',
+    'w\u0077' : '𝗐\U0001D5D0',
+    'x\u0078' : '𝗑\U0001D5D1',
+    'y\u0079' : '𝗒\U0001D5D2',
+    'z\u007A' : '𝗓\U0001D5D3',
+}
 
+
+# 10. Obfuscator deterministic/full replacement.
+#    Replace "Basic Latin" symbols (0000-007F) with
+#    "Mathematical Monospace" (0001D670 - 0001D6A3) and
+#    "Mathematical Monospace Digit" (0001D7F6 - 0001D7FF).
+# Mathematical Monospace ('𝙰\U0001D670' - '𝚣\U0001D6A3') and
+# Mathematical Monospace Digit ('𝟶\U0001D7F6' - '𝟿\U0001D7FF').
+# https://symbl.cc/en/unicode-table/#mathematical-alphanumeric-symbols
+DICT_OBFUSCATOR_DETER_FULL_FONT_MATH_MONOSPACE = {
+    # "SPACE" -> {"BRAILLE PATTERN BLANK"}.
+    ' \u0020' : '⠀\u2800',
+    #
+    ',\u002C' : '‚\u201A', # 'ˏ\02CF¸\u00B8'
+    '-\u002D' : '‐\u2010', # '‑\u2011⁃\u2043−\u2212'
+    '.\u002E' : '․\u2024',
+    ':\u003A' : '։\u0589', # '∶\u2236꞉\uA789'
+    ';\u003B' : ';\u037E', # '⁏\u204F'
+    #
+    '0\u0030' : '𝟶\U0001D7F6',
+    '1\u0031' : '𝟷\U0001D7F7',
+    '2\u0032' : '𝟸\U0001D7F8',
+    '3\u0033' : '𝟹\U0001D7F9',
+    '4\u0034' : '𝟺\U0001D7FA',
+    '5\u0035' : '𝟻\U0001D7FB',
+    '6\u0036' : '𝟼\U0001D7FC',
+    '7\u0037' : '𝟽\U0001D7FD',
+    '8\u0038' : '𝟾\U0001D7FE',
+    '9\u0039' : '𝟿\U0001D7FF',
+    #
+    'A\u0041' : '𝙰\U0001D670',
+    'B\u0042' : '𝙱\U0001D671',
+    'C\u0043' : '𝙲\U0001D672',
+    'D\u0044' : '𝙳\U0001D673',
+    'E\u0045' : '𝙴\U0001D674',
+    'F\u0046' : '𝙵\U0001D675',
+    'G\u0047' : '𝙶\U0001D676',
+    'H\u0048' : '𝙷\U0001D677',
+    'I\u0049' : '𝙸\U0001D678',
+    'J\u004A' : '𝙹\U0001D679',
+    'K\u004B' : '𝙺\U0001D67A',
+    'L\u004C' : '𝙻\U0001D67B',
+    'M\u004D' : '𝙼\U0001D67C',
+    'N\u004E' : '𝙽\U0001D67D',
+    'O\u004F' : '𝙾\U0001D67E',
+    'P\u0050' : '𝙿\U0001D67F',
+    'Q\u0051' : '𝚀\U0001D680',
+    'R\u0052' : '𝚁\U0001D681',
+    'S\u0053' : '𝚂\U0001D682',
+    'T\u0054' : '𝚃\U0001D683',
+    'U\u0055' : '𝚄\U0001D684',
+    'V\u0056' : '𝚅\U0001D685',
+    'W\u0057' : '𝚆\U0001D686',
+    'X\u0058' : '𝚇\U0001D687',
+    'Y\u0059' : '𝚈\U0001D688',
+    'Z\u005A' : '𝚉\U0001D689',
+    #
+    'a\u0061' : '𝚊\U0001D68A',
+    'b\u0062' : '𝚋\U0001D68B',
+    'c\u0063' : '𝚌\U0001D68C',
+    'd\u0064' : '𝚍\U0001D68D',
+    'e\u0065' : '𝚎\U0001D68E',
+    'f\u0066' : '𝚏\U0001D68F',
+    'g\u0067' : '𝚐\U0001D690',
+    'h\u0068' : '𝚑\U0001D691',
+    'i\u0069' : '𝚒\U0001D692',
+    'j\u006A' : '𝚓\U0001D693',
+    'k\u006B' : '𝚔\U0001D694',
+    'l\u006C' : '𝚕\U0001D695',
+    'm\u006D' : '𝚖\U0001D696',
+    'n\u006E' : '𝚗\U0001D697',
+    'o\u006F' : '𝚘\U0001D698',
+    'p\u0070' : '𝚙\U0001D699',
+    'q\u0071' : '𝚚\U0001D69A',
+    'r\u0072' : '𝚛\U0001D69B',
+    's\u0073' : '𝚜\U0001D69C',
+    't\u0074' : '𝚝\U0001D69D',
+    'u\u0075' : '𝚞\U0001D69E',
+    'v\u0076' : '𝚟\U0001D69F',
+    'w\u0077' : '𝚠\U0001D6A0',
+    'x\u0078' : '𝚡\U0001D6A1',
+    'y\u0079' : '𝚢\U0001D6A2',
+    'z\u007A' : '𝚣\U0001D6A3',
+}
+
+
+# The following symbols/fonts can be added too, if needed:
+#
+# Mathematical Bold ('𝐀\U0001D400' - '𝐳\U0001D433').
+# Mathematical Bold Digit ('𝟎\U0001D7CE' - '𝟗\U0001D7D7').
+#
+# Mathematical Italic ('𝐴\U0001D434' - '𝑧\U0001D467').
+# Note: "h is missing". Use 'ℎ\u210Eh' instead.
+#
+# Mathematical Bold Italic ('𝑨\U0001D468' - '𝒛\U0001D49B').
+#
+# Mathematical Bold Script ('𝓐\U0001D4D0' - '𝔃\U0001D503').
+#
 # Mathematical Sans-Serif Bold ('𝗔\U0001D5D4' - '𝘇\U0001D607').
 # Mathematical Sans-Serif Bold Digit ('𝟬\U0001D7EC' - '𝟵\U0001D7F5').
-# ...
-
+#
 # Mathematical Sans-Serif Italic ('𝘈\U0001D608' - '𝘻\U0001D63B').
-# ...
-
+#
 # Mathematical Sans-Serif Bold Italic ('𝘼\U0001D63C' - '𝙯\U0001D66F').
-# ...
 
-# Mathematical Monospace ('𝙰\U0001D670' - '𝚣\U0001D6A3').
-# Mathematical Monospace Digit ('𝟶\U0001D7F6' - '𝟿\U0001D7FF').
-# ...
 
 # TODO: consider using some of the Mathematical symbols for other obfuscator types.
 
@@ -596,6 +752,8 @@ DICT_OBFUSCATOR_TYPES = {
     6 : "6. Random partial replacement with various very look-alike symbols.",
     7 : "7. Random partial replacement with various somewhat look-alike symbols.",
     8 : '8. Deterministic full replacement with paired "Fullwidth Form" symbols.',
+    9 : '9. Deterministic full replacement with paired "Mathematical Sans-Serif" symbols.',
+    10 : '10. Deterministic full replacement with paired "Mathematical Monospace" symbols.',
 }
 
 '''
@@ -652,7 +810,9 @@ if False :
     validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_RANDOM_FULL)
     validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_RANDOM_PARTIAL)
     validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_RANDOM_ALL)
-    validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_DETER_FULL_FWF)
+    validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_DETER_FULL_FONT_FULLWIDTH_FORM)
+    validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_DETER_FULL_FONT_MATH_SAN_SERIF)
+    validate_obfuscator(dict_obfuscator = DICT_OBFUSCATOR_DETER_FULL_FONT_MATH_MONOSPACE)
 
     # seed(a = 12345)
     seed(datetime.now().timestamp())
@@ -905,8 +1065,9 @@ def main(
                         DICT_OBFUSCATOR_RANDOM_PARTIAL,
                         DICT_OBFUSCATOR_RANDOM_ALL,
                         #
-                        DICT_OBFUSCATOR_DETER_FULL_FWF,
-                        # ...
+                        DICT_OBFUSCATOR_DETER_FULL_FONT_FULLWIDTH_FORM,
+                        DICT_OBFUSCATOR_DETER_FULL_FONT_MATH_SAN_SERIF,
+                        DICT_OBFUSCATOR_DETER_FULL_FONT_MATH_MONOSPACE,
                         ]
                     dict_obfuscator = lst_dict_obfuscators[
                         obfuscator_type_index - 1]
@@ -985,6 +1146,8 @@ if __name__ == "__main__":
             DICT_OBFUSCATOR_TYPES[6],
             DICT_OBFUSCATOR_TYPES[7],
             DICT_OBFUSCATOR_TYPES[8],
+            DICT_OBFUSCATOR_TYPES[9],
+            DICT_OBFUSCATOR_TYPES[10],
             "\n")),
         type = int,
         required = True,
