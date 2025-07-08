@@ -740,9 +740,6 @@ DICT_OBFUSCATOR_DETER_FULL_FONT_MATH_MONOSPACE = {
 # Mathematical Sans-Serif Bold Italic ('𝘼\U0001D63C' - '𝙯\U0001D66F').
 
 
-# TODO: consider using some of the Mathematical symbols for other obfuscator types.
-
-
 DICT_OBFUSCATOR_TYPES = {
     1 : "1. Deterministic full replacement of spaces only.",
     2 : "2. Random full replacement of spaces only.",
