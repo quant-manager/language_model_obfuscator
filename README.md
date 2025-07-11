@@ -58,5 +58,7 @@
 
 
 
-ЈоҺɴѕоɴ‚⠀Ј․‚⠀(Јυʟƴ⠀4‚⠀2025)․⠀Техᴛ⠀Оɓƒυѕсаᴛоɾ․⠀ΡƴᴛҺоɴ⠀Ρɾоɡɾаʍ․⠀ԌіᴛΗυɓ⠀Ɍероѕіᴛоɾƴ․⠀https://github.com/quant-manager/language\_model\_obfuscator
+ЈоҺɴѕоɴ‚⠀Ј․‚⠀(Јυʟƴ⠀4‚⠀2025)․⠀Техᴛ⠀Оɓƒυѕсаᴛоɾ․⠀ΡƴᴛҺоɴ⠀Ρɾоɡɾаʍ․⠀ԌіᴛΗυɓ⠀Ɍероѕіᴛоɾƴ․⠀\[https://github.com/quant-manager/language\_model\_obfuscator](https://github.com/quant-manager/language\_model\_obfuscator)
+
+
 
