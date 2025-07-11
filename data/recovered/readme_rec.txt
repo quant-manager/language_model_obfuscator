@@ -4,7 +4,7 @@ James Johnson. July 11, 2025.
 
 Tags: #obfuscator #text obfuscator #language model #copyright #search engine
 
-Sharing text messages online may turn them into the subject of computerized processing. Message text obfuscation may prevent such cases of unauthorized use or processing of copyright-protected material. My open-source code in Johnson (2025) supports both forward obfuscation and reverse-obfuscation. However, the strength of text obfuscation is not only in the burden to revert-obfuscate non-deterministically jumbled but still human-readable text, but also in its ability to conceal the fact of obfuscation. Text obfuscation has these two objectives: 
+Sharing text messages online may turn them into the object of computerized processing. Message text obfuscation may prevent such cases of unauthorized use or processing of copyright-protected material. My open-source code in Johnson (2025) supports both forward obfuscation and reverse-obfuscation. However, the strength of text obfuscation is not only in the burden to revert-obfuscate non-deterministically jumbled but still human-readable text, but also in its ability to conceal the fact of obfuscation. Text obfuscation has these two objectives: 
 
 1. Preserve the visual appearance of the original text as much as possible, or at least preserve some acceptable degree of human-readability of the obfuscated text, which retains the same language and words’ sequences.
 2. Alter the byte sequences of the original text to a degree that computerized text processing would be impossible on this obfuscated text, which consists of random and noisy non-standard sequences of bytes with various Unicode characters.
